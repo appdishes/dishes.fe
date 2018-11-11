@@ -33,7 +33,8 @@ export class NewDishComponent{
         name: "",
         type: "",
         description: "",
-        category: ""
+        category: "",
+        id: ""
     }
    
 
