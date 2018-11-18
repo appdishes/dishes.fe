@@ -7,14 +7,14 @@ import { ActivatedRoute } from '@angular/router'
     template: `
     <div *ngFor="let dish of webService.dishes | async">
         <mat-card class="card">
-            <mat-card-title style="cursor: pointer">{{dish.id}}</mat-card-title>
+            <mat-card-title [routerLink]="['/dishes', dish.id]"  style="cursor: pointer">{{dish.id}}</mat-card-title>
             <mat-card-content>{{dish.name}}</mat-card-content>
             <mat-card-content>{{dish.type}}</mat-card-content>
             <mat-card-content>{{dish.category}}</mat-card-content>
             <mat-card-content>{{dish.description}}</mat-card-content>
-            <button mat-raised-button color="warn">Delete</button>
-            <button mat-raised-button color="primary">Update</button>
-            <button [routerLink]="['/dishes', dish.id]"  mat-raised-button color="primary">View Details</button>
+            <button (click)="delete(dish)" mat-raised-button color="warn">Delete</button>
+            <button [routerLink]="['/manage', dish.id]"  mat-raised-button color="primary">Update</button>
+            <button [routerLink]="['/manage', dish.id]"  mat-raised-button color="primary">View Details</button>
         </mat-card>
     </div>
     
@@ -27,11 +27,11 @@ export class DishesComponent{
         ){}
 
         ngOnInit(){
-           var id = this.route.snapshot.params.id;
-           this.webService.getDishes(id);
+           //var id = this.route.snapshot.params.id;
+           this.webService.getDishes();
         }
 
-        deleteDish(dish){
-            this.webService.getDishes(dish);
+        delete(dish){
+            this.webService.deleteDish(dish);
         }
 }

@@ -1,0 +1,20 @@
+<mat-card>
+    <form [formGroup]="form" (ngSubmit)="onSubmit()">
+        <mat-form-field>
+            <input style="width:350px" [ngClass]="{'error': isValid('name')}" matInput placeholder="Name" formControlName="name">
+        </mat-form-field>
+        <mat-form-field>
+            <input style="width:350px" [ngClass]="{'error': isValid('type')}" matInput placeholder="Type" formControlName="type">
+        </mat-form-field>
+        <mat-form-field>
+            <input style="width:350px" [ngClass]="{'error': isValid('category')}" matInput placeholder="Category" formControlName="category">
+        </mat-form-field>
+        <mat-form-field>
+            <textarea  style="width:350px" [ngClass]="{'error': isValid('description')}" matInput placeholder="Description" formControlName="description"></textarea>
+        </mat-form-field>
+        <br>
+        <button mat-raised-button ng-show="dish.id ==''" class="ng-hide" color="primary">Create Dish</button>
+        <button mat-raised-button ng-show="dish.id !=''" class="ng-hide" color="primary">Update Dish</button>
+
+    </form>
+</mat-card>
