@@ -2,10 +2,9 @@ import { Component } from '@angular/core';
 import { FormBuilder, Validators } from '@angular/forms';
 import { WebService } from './web.service'
 import { ActivatedRoute } from '@angular/router'
-import { DishesComponent } from './dishes.component';
 
 @Component({
-  //  moduleId: module.id,
+  //  moduleId: module.id,//this does not work for some reason. However it works without it.
     selector: 'manage',
     templateUrl: 'dishes.manage.component.html',
     styles: [`
@@ -16,34 +15,25 @@ import { DishesComponent } from './dishes.component';
 })
 export class ManageDishComponent {
     form;
-    dish = {
-        name: "",
-        type: "",
-        description: "",
-        category: "",
-        id: ""
-    }
+    dish;
 
     constructor(private fb: FormBuilder, 
         private webService: WebService,
         private route: ActivatedRoute) {
-
-        this.form = fb.group({
-            name: [this.dish.name, Validators.required],
-            type: [this.dish.type, Validators.required],
-            category: [this.dish.category, Validators.required],
-            description: [this.dish.description, Validators.required]
-            })
+        this.resetDish();
     }
 
     ngOnInit(){
+        /**
         var id = this.route.snapshot.params.id;
         console.log("ppppp id " + id);
 
         this.webService.getDishesById(id);
-        console.log("ppppp this.webService.singleDish.name " + this.webService.singleDish.name);
+        console.log("ppppp this.webService.singleDish " + this.webService.singleDish);
         if(this.webService.singleDish != null){
-            this.dish = this.webService.singleDish;
+            this.dish = this.webService.singleDish[0];
+            console.log("ppppp this.webService.dish " + this.dish);
+
             this.form = this.fb.group({
                 name: [this.dish.name, Validators.required],
                 type: [this.dish.type, Validators.required],
@@ -51,6 +41,7 @@ export class ManageDishComponent {
                 description: [this.dish.description, Validators.required]
                 }) 
         }
+        */
      }
 
     onSubmit() {
@@ -60,9 +51,28 @@ export class ManageDishComponent {
         this.dish.description = this.form.value.description;
 
         this.webService.postDish(this.dish);
+        //this.resetDish();
     }
 
     isValid(control) {
         return this.form.controls[control].invalid && this.form.controls[control].touched
     }
+
+    resetDish(){
+        this.dish = {
+            name: "",
+            type: "",
+            description: "",
+            category: "",
+            id: ""
+        }
+
+        this.form = this.fb.group({
+            name: [this.dish.name, Validators.required],
+            type: [this.dish.type, Validators.required],
+            category: [this.dish.category, Validators.required],
+            description: [this.dish.description, Validators.required]
+            })
+    }
 }
+

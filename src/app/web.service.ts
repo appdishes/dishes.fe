@@ -1,4 +1,5 @@
-import { Http } from '@angular/http';
+import { Http  } from '@angular/http';
+import { HttpClient,HttpParams } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import 'rxjs/add/operator/toPromise';
 import { Subject } from 'rxjs/Rx'
@@ -9,11 +10,13 @@ export class WebService {
     BASE_URL = 'http://localhost:8090';
   // BASE_URL = 'https://appdishes.herokuapp.com';
     private dishesStore = [];
-
-    singleDish;
     private dishSubjet = new Subject();
-
     dishes = this.dishSubjet.asObservable();
+
+    private singleDishStore = new Dish();
+    private singleDishSubjet = new Subject();
+    singleDish = this.singleDishSubjet.asObservable();
+
 
     constructor(private http: Http, private sb: MatSnackBar) {
         this.getDishes();
@@ -21,7 +24,6 @@ export class WebService {
 
 
      getDishes(){
-
         this.http.get(this.BASE_URL + '/dishes').subscribe(response =>{
                 this.dishesStore = response.json();
                 this.dishSubjet.next(this.dishesStore);
@@ -31,29 +33,61 @@ export class WebService {
     }
 
     getDishesById(id){
-        this.http.get(this.BASE_URL + '/dishes'+'/' + id).subscribe(response =>{
-               // this.dishesStore = response.json();
-              //  this.dishSubjet.next(this.dishesStore);
-              //  if(id != null){
-                    this.singleDish = response.json()[0];
-                    console.log("4445 id " + id);
-
-                    console.log("4445 response.json()[0] " + response.json()[0].name);
-                    console.log("4445 this.singleDish.name " + this.singleDish.name);
-               // }
-        }, error => {
-            this.handleError("Unable to get dishes");
-        });
+        if(id != null || id != ''){
+            this.http.get(this.BASE_URL + '/dishes'+'/' + id).subscribe(response =>{
+                this.dishesStore = response.json();
+                this.dishSubjet.next(this.dishesStore);
+            }, error => {
+                this.handleError("Unable to get dishes");
+            });
+        }
     }
 
-
-    async postDish(dish){
-        try{
-            var response = await this.http.post(this.BASE_URL + '/dishes', dish).toPromise();
-            this.informCreated("dish " + response.json().name +" was created!");
-        }catch(error){
-            this.handleError("Unable to post dish");
+    getDishesByName(name){
+        if(name != null || name != ''){
+            let data = {"name": name};
+            this.http.get(this.BASE_URL + '/dishes/by', {params: data}).subscribe(response =>{
+                console.log("oooo" + response.json())
+                this.dishesStore = response.json();
+                this.dishSubjet.next(this.dishesStore);
+            }, error => {
+                this.handleError("Unable to get dishes");
+            });
         }
+    }
+
+    getDishesByCategory(category){
+        if(category != null || category != ''){
+            let data = {"category": category};
+            this.http.get(this.BASE_URL + '/dishes/by', {params: data}).subscribe(response =>{
+                console.log("oooo" + response.json())
+                this.dishesStore = response.json();
+                this.dishSubjet.next(this.dishesStore);
+            }, error => {
+                this.handleError("Unable to get dishes");
+            });
+        }
+    }
+
+    getDishesByType(type){
+        if(type != null || type != ''){
+            let data = {"type": type};
+            this.http.get(this.BASE_URL + '/dishes/by', {params: data}).subscribe(response =>{
+                console.log("oooo" + response.json())
+                this.dishesStore = response.json();
+                this.dishSubjet.next(this.dishesStore);
+            }, error => {
+                this.handleError("Unable to get dishes");
+            });
+        }
+    }
+
+    postDish(dish){
+        this.http.post(this.BASE_URL + '/dishes', dish).subscribe(response =>{
+        this.informCreated("dish " + response.json().name +" was created!");
+       }, error  => {
+            this.handleError("Unable to post dish");
+        });
      }
 
     deleteDish(dish){
@@ -82,4 +116,11 @@ export class WebService {
      private informCreated(message){
         this.sb.open(message, 'close', {duration: 2000});
      }
+}
+
+export class Dish{
+    name: string;
+    type: string;
+    description: string;
+    category: string;
 }
