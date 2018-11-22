@@ -1,11 +1,11 @@
 <br />
 <mat-card>
-<form [formGroup]="searchForm" (ngSubmit)="onSubmit()" >
+<form [formGroup]="searchForm" (ngSubmit)="onSubmit()" autocomplete="off">
         <mat-form-field>
             <input style="width:450px" matInput placeholder="Search by name, type, or category.." formControlName="search">
         </mat-form-field>
         <br>
-        <button mat-raised-button color="primary"><i class="fa fa-search"></i></button>        
+        <button mat-raised-button color="primary">Search Dishes</button>        
     </form>
 </mat-card>
 
