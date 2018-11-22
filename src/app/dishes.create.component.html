@@ -1,3 +1,4 @@
+<br />
 <mat-card>
     <form [formGroup]="form" (ngSubmit)="onSubmit()">
         <mat-form-field>
@@ -13,8 +14,10 @@
             <textarea  style="width:350px" [ngClass]="{'error': isValid('description')}" matInput placeholder="Description" formControlName="description"></textarea>
         </mat-form-field>
         <br>
-        <button mat-raised-button ng-show="dish.id ==''" class="ng-hide" color="primary">Create Dish</button>
-        <button mat-raised-button ng-show="dish.id !=''" class="ng-hide" color="primary">Update Dish</button>
+       <!--  <button (click)="delete(dish)" mat-raised-button color="warn">Delete</button>--> 
+        <button mat-raised-button color="primary">Create Dish</button>
+
+      <!-- <button mat-raised-button ng-show="dish.id !=''" class="ng-hide" color="primary">Update Dish</button> --> 
 
     </form>
 </mat-card>

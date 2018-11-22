@@ -7,8 +7,8 @@ import { MatSnackBar } from '@angular/material';
 
 @Injectable()
 export class WebService {
-    BASE_URL = 'http://localhost:8090';
-  // BASE_URL = 'https://appdishes.herokuapp.com';
+    //BASE_URL = 'http://localhost:8090';
+   BASE_URL = 'https://appdishes.herokuapp.com';
     private dishesStore = [];
     private dishSubjet = new Subject();
     dishes = this.dishSubjet.asObservable();
@@ -47,7 +47,7 @@ export class WebService {
         if(name != null || name != ''){
             let data = {"name": name};
             this.http.get(this.BASE_URL + '/dishes/by', {params: data}).subscribe(response =>{
-                console.log("oooo" + response.json())
+                //console.log("oooo" + response.json())
                 this.dishesStore = response.json();
                 this.dishSubjet.next(this.dishesStore);
             }, error => {
@@ -60,7 +60,7 @@ export class WebService {
         if(category != null || category != ''){
             let data = {"category": category};
             this.http.get(this.BASE_URL + '/dishes/by', {params: data}).subscribe(response =>{
-                console.log("oooo" + response.json())
+               // console.log("oooo" + response.json())
                 this.dishesStore = response.json();
                 this.dishSubjet.next(this.dishesStore);
             }, error => {
@@ -73,9 +73,32 @@ export class WebService {
         if(type != null || type != ''){
             let data = {"type": type};
             this.http.get(this.BASE_URL + '/dishes/by', {params: data}).subscribe(response =>{
-                console.log("oooo" + response.json())
+               // console.log("oooo" + response.json())
                 this.dishesStore = response.json();
                 this.dishSubjet.next(this.dishesStore);
+            }, error => {
+                this.handleError("Unable to get dishes");
+            });
+        }
+    }
+
+    search(search){
+        if(typeof search === 'undefined' || search == null || search === null || search == ''){
+           // console.log("hhhhhh " + search)
+            alert("Please provide value in search box.")
+
+        }else{
+           // console.log("oooo" + search)
+
+            let data = {"search": search};
+            this.http.get(this.BASE_URL + '/dishes/search', {params: data}).subscribe(response =>{
+                console.log("oooo" + response.json())
+               if(response.json().length === 0){
+                    alert("Search did not return any results.")
+               }else{
+                this.dishesStore = response.json();
+                this.dishSubjet.next(this.dishesStore);
+               }
             }, error => {
                 this.handleError("Unable to get dishes");
             });
@@ -95,7 +118,7 @@ export class WebService {
             this.http.delete(this.BASE_URL + '/dishes'+"/"+ dish.id).finally(()=> {this.dishSubjet;})
                 .subscribe(
                 res => {
-                    this.alert("Dish Has been Deleted");
+                    this.alertUser("Dish Has been Deleted");
                 },
                 err => {
                     this.handleError("Unable to delete dish");
@@ -104,12 +127,17 @@ export class WebService {
 }
 
     private handleError(error) {
-        console.error(error);
+        //console.error(error);
         this.sb.open(error, 'close', { duration: 2000 });
     }
 
-     private alert(message){
-        console.log(message);
+    private emptyValue(error) {
+       // console.error(error);
+        this.sb.open(error, 'close', { duration: 2000 });
+    }
+
+     private alertUser(message){
+       // console.log(message);
         this.sb.open(message, 'close', {duration: 2000});
      }
 

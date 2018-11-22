@@ -11,7 +11,7 @@ import { AppComponent } from './app.component';
 import { WebService } from './web.service';
 import { NavComponent } from './nav.component';
 import { HomeComponent } from './home.component';
-import { ManageDishComponent } from './dishes.manage.component';
+import { ManageDishComponent } from './dishes.create.component';
 
 
 var routes = [
@@ -28,7 +28,7 @@ var routes = [
     component: DishesComponent
   },
   {
-    path: 'manage',
+    path: 'create',
     component: ManageDishComponent
   },
   {

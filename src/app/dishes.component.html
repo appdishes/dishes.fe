@@ -1,0 +1,27 @@
+<br />
+<mat-card>
+<form [formGroup]="searchForm" (ngSubmit)="onSubmit()" >
+        <mat-form-field>
+            <input style="width:450px" matInput placeholder="Search by name, type, or category.." formControlName="search">
+        </mat-form-field>
+        <br>
+        <button mat-raised-button color="primary"><i class="fa fa-search"></i></button>        
+    </form>
+</mat-card>
+
+<br />
+    <button (click)="showAll()" mat-raised-button color="primary">Show All</button>
+
+    <div *ngFor="let dish of webService.dishes | async">
+        <mat-card class="card">
+            <mat-card-title (click)="selectByName(dish.name)" matTooltip="Click to see all dishes with this name" style="cursor: pointer">{{dish.name}}</mat-card-title>
+            <mat-card-content (click)="selectByType(dish.type)" matTooltip="Click to see all dishes from this type" style="cursor: pointer">{{dish.type}}</mat-card-content>
+            <mat-card-content (click)="selectByCategory(dish.category)" matTooltip="Click to see all dishes from this category" style="cursor: pointer">{{dish.category}}</mat-card-content>
+            <mat-card-content>{{dish.description}}</mat-card-content>
+            <button (click)="delete(dish)" mat-raised-button color="warn">Delete</button>
+            <button (click)="selectById(dish.id)"  mat-raised-button color="primary">See this dish only</button>
+
+           <!-- <button [routerLink]="['/manage', dish.id]"  mat-raised-button color="primary">Update</button> -->
+           <!--  <button [routerLink]="['/manage', dish.id]"  mat-raised-button color="primary">View Details</button> -->
+        </mat-card>
+    </div>

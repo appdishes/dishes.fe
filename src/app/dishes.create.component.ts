@@ -6,7 +6,7 @@ import { ActivatedRoute } from '@angular/router'
 @Component({
   //  moduleId: module.id,//this does not work for some reason. However it works without it.
     selector: 'manage',
-    templateUrl: 'dishes.manage.component.html',
+    templateUrl: 'dishes.create.component.html',
     styles: [`
         .error {
             background-color: #fff0f0
@@ -74,5 +74,6 @@ export class ManageDishComponent {
             description: [this.dish.description, Validators.required]
             })
     }
+
 }
 

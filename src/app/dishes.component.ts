@@ -1,32 +1,27 @@
 import { Component } from '@angular/core';
-import { WebService } from './web.service'
-import { ActivatedRoute } from '@angular/router'
+import { WebService } from './web.service';
+import { ActivatedRoute } from '@angular/router';
+import { FormBuilder, Validators } from '@angular/forms';
 
 @Component({
     selector: 'dishes',
-    template: `
-    <button (click)="showAll()" mat-raised-button color="primary">Show All</button>
-
-    <div *ngFor="let dish of webService.dishes | async">
-        <mat-card class="card">
-            <mat-card-title (click)="selectById(dish.id)" style="cursor: pointer">{{dish.id}}</mat-card-title>
-            <mat-card-content (click)="selectByName(dish.name)" style="cursor: pointer">{{dish.name}}</mat-card-content>
-            <mat-card-content (click)="selectByType(dish.type)" style="cursor: pointer">{{dish.type}}</mat-card-content>
-            <mat-card-content (click)="selectByCategory(dish.category)" style="cursor: pointer">{{dish.category}}</mat-card-content>
-            <mat-card-content>{{dish.description}}</mat-card-content>
-            <button (click)="delete(dish)" mat-raised-button color="warn">Delete</button>
-            <button [routerLink]="['/manage', dish.id]"  mat-raised-button color="primary">Update</button>
-            <button [routerLink]="['/manage', dish.id]"  mat-raised-button color="primary">View Details</button>
-        </mat-card>
-    </div>
-    
-    `
+    templateUrl: './dishes.component.html',
+    styles: [`
+        .error {
+            background-color: #fff0f0
+        }
+    `]
 })
-export class DishesComponent{
 
-    constructor( private webService: WebService,
-                private route: ActivatedRoute
-        ){}
+export class DishesComponent{
+    searchForm;
+
+    constructor(    private fb: FormBuilder, 
+                    private webService: WebService,
+                    private route: ActivatedRoute
+        ){
+            this.resetSearchForm();
+        }
 
         ngOnInit(){
            this.webService.getDishes();
@@ -54,5 +49,15 @@ export class DishesComponent{
 
         selectByCategory(category){
             this.webService.getDishesByCategory(category);
+        }
+
+        resetSearchForm(){
+            this.searchForm = this.fb.group({
+                search: ['', Validators.required]
+                })
+        }
+    
+        onSubmit(){
+            this.webService.search(this.searchForm.value.search);
         }
 }
